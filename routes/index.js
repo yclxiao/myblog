@@ -1,5 +1,5 @@
-module.exports = function(app) {
-  app.get('/',(req,res) => {
+module.exports = function (app) {
+  app.get('/', (req, res) => {
     res.redirect('/posts')
   })
 
@@ -9,4 +9,10 @@ module.exports = function(app) {
   app.use('/posts', require('./posts'))
   app.use('/comments', require('./comments'))
 
+  // 404 page
+  app.use(function (req, res) {
+    if (!res.headersSent) {
+      res.status(404).render('404')
+    }
+  })
 }
