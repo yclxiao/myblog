@@ -4,6 +4,8 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const flash = require('connect-flash');
 const config = require('config-lite')(__dirname);
+const winston = require('winston');
+const expressWinston = require('express-winston');
 
 const routes = require('./routes');
 const pkg = require('./package');
@@ -47,7 +49,33 @@ app.use((req,res,next) => {
   next()
 });
 
+// 正常请求的日志
+app.use(expressWinston.logger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/success.log'
+    })
+  ]
+}));
+
 routes(app);
+
+// 错误请求的日志
+app.use(expressWinston.errorLogger({
+  transports: [
+    new winston.transports.Console({
+      json: true,
+      colorize: true
+    }),
+    new winston.transports.File({
+      filename: 'logs/error.log'
+    })
+  ]
+}))
 
 app.use(function (err, req, res, next) {
   console.log('begin error')

@@ -137,6 +137,7 @@ router.post('/:postId/edit', checkLogin, function (req, res, next) {
         })
         .catch(next)
     })
+    .catch(next)
 })
 
 // GET /posts/:postId/remove 删除一篇文章
@@ -160,6 +161,7 @@ router.post('/:postId/remove', checkLogin, (req, res, next) => {
         })
         .catch(next)
     })
+    .catch(next)
 })
 
 module.exports = router;
